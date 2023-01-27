@@ -22,19 +22,16 @@
 
       <v-spacer></v-spacer>
 
-      <!-- <v-btn
-        v-on:click="test"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Create Blog</span>
-        <v-icon>mdi-plus</v-icon>
-      </v-btn> -->
       <CreateBlogForm/>
     </v-app-bar>
 
-
-    <v-main>
+    <v-main class="main">
+      <v-col
+        sm="12"
+        md="10"
+        lg="10">
+        <BlogCard v-for="(x,_) in blogs" :item="x" :key="_"/>
+      </v-col>
     </v-main>
   </v-app>
 </template>
@@ -42,18 +39,21 @@
 <script>
 
 import CreateBlogForm from "./components/CreateBlogForm"
-// import HelloWorld from './components/HelloWorld';
+import BlogModel from "./types/BlogModel.js"
+import BlogCard from "./components/BlogCard"
 
 export default {
   name: 'App',
 
   components: {
     CreateBlogForm,
-    // HelloWorld
-  },
+    BlogCard
+},
 
   data: () => ({
-    showAlert: false
+    showAlert: false,
+    blog: new BlogModel("title", "content"),
+    blogs:[new BlogModel("title", "content"), new BlogModel("title", "content")]
   }),
   methods:{
     test: function(){
@@ -62,3 +62,14 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.main{
+  background-color: #f0f0f0;
+}
+
+.col{
+  margin: auto;
+}
+
+</style>

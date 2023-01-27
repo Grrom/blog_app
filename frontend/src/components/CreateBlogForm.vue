@@ -5,11 +5,11 @@
     >
       <template v-slot:activator="{ props }">
         <v-btn
-          color="primary"
+          color="secondary"
           v-bind="props"
           v-on:click="openDialog"
         >
-         Create a new Blog 
+         Create Blog 
         </v-btn>
       </template>
       <v-card>
@@ -65,7 +65,7 @@
   export default {
     name:"CreateBlogForm",
     data: () => ({
-      dialog: true,
+      dialog: false,
     }),
     methods:{
         openDialog: function(){
