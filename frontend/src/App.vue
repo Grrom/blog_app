@@ -56,14 +56,9 @@ export default {
   },
 
   data: () => ({
-    showAlert: false,
-    blog: new BlogModel("1","title", "content"),
-    blogs:[new BlogModel("2","title", "content"), new BlogModel("3","title", "content")]
+    blogs:[new BlogModel("2","title", "yeee"), new BlogModel("3","title", "hawwww")]
   }),
   methods:{
-    test: function(){
-      this.showAlert=!this.showAlert
-    }
   }
 };
 </script>
