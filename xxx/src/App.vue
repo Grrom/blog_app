@@ -36,12 +36,12 @@
   </v-app>
 </template>
 
-<script lang="ts">
+<script>
 
-import BlogModel from "./types/BlogModel"
-import ApiHelper from "./helpers/ApiHelper"
-import CreateBlogForm from "./components/CreateBlogForm.vue"
-import BlogCard from "./components/BlogCard.vue"
+import CreateBlogForm from "./components/CreateBlogForm"
+import BlogModel from "./types/BlogModel.js"
+import ApiHelper from "./helpers/ApiHelper.ts"
+import BlogCard from "./components/BlogCard"
 
 export default {
   name: 'App',
@@ -53,12 +53,13 @@ export default {
 
   mounted(){
     ApiHelper.getBlogs()
+
   },
 
   data: () => ({
     showAlert: false,
-    blog: new BlogModel("1","title", "content"),
-    blogs:[new BlogModel("2","title", "content"), new BlogModel("3","title", "content")]
+    blog: new BlogModel(1,"title", "content"),
+    blogs:[new BlogModel(2,"title", "content"), new BlogModel("title", "content")]
   }),
   methods:{
     test: function(){

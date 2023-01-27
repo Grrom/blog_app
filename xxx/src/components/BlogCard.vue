@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import BlogModel from '@/types/BlogModel.ts';
+import BlogModel from '@/types/BlogModel.js';
 
 export default {
   name:"BlogCard",
