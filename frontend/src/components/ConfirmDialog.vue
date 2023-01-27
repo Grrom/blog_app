@@ -21,7 +21,7 @@
       <v-btn
         color="green-darken-1"
         variant="text"
-        @click="dialog = false"
+        @click="confirm"
       >
         Confirm
       </v-btn>
@@ -52,6 +52,10 @@ export default {
     }
   },
   methods:{
+    confirm(){
+        if(this.onConfirm!==undefined) this.onConfirm!();
+        this.dialog = false
+    },
     showDialog(){
         this.dialog = !this.dialog
     }

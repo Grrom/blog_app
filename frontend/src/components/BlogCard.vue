@@ -7,22 +7,40 @@
         <v-container>
             <ConfirmDialog buttonText="Update" color="primary"/>
             <span class="custom-spacer"></span>
-            <ConfirmDialog buttonText="Delete" question="Are you sure you want to delete this post?" color="secondary"/>
+            <ConfirmDialog 
+                buttonText="Delete" 
+                question="Are you sure you want to delete this post?" 
+                color="secondary" 
+                :onConfirm="deletePost"
+            />
         </v-container>
     </div>
 </template>
 
 <script lang="ts">
+import AlertHelper from '@/helpers/AlertHelper';
+import ApiHelper from '@/helpers/ApiHelper';
 import BlogModel from '@/types/BlogModel';
 import ConfirmDialog from './ConfirmDialog.vue';
 
 export default {
   name:"BlogCard",
   props:{
-    item: BlogModel
+    item: {
+      type: BlogModel,
+      required: true,
+    },
   },
   components:{
     ConfirmDialog
+  },
+  methods:{
+    deletePost:function(){
+        const loading =  AlertHelper.showLoading("Deleting Post...");
+        ApiHelper.deleteBlog(this.item.id).then(()=>{
+            loading.close()
+        }).catch(e=>{loading.close})
+    }
   }
 }
 </script>

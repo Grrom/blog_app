@@ -1,7 +1,7 @@
 import BlogModel from "../types/BlogModel";
 
 export default class ApiHelper {
-  static url = "http://localhost:8080/";
+  static url = "http://localhost:8888/";
 
   static async getBlogs(): Promise<Array<BlogModel>> {
     return await fetch(this.url + "list_blogs", {
