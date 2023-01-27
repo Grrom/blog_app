@@ -39,6 +39,7 @@ export default {
         const loading =  AlertHelper.showLoading("Deleting Post...");
         ApiHelper.deleteBlog(this.item.id).then(()=>{
             loading.close()
+            this.$emit("deleted", this.item.id)
         }).catch(e=>{loading.close})
     }
   }

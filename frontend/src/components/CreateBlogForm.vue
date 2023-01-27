@@ -25,6 +25,7 @@
             >
               <v-text-field
                 label="Blog Title*"
+                v-model="title"
                 required
               ></v-text-field>
             </v-col>
@@ -34,6 +35,7 @@
               md="12"
             >
               <v-textarea
+                v-model="content"
                 label="Content*"
                 required
               ></v-textarea>
@@ -53,7 +55,7 @@
           <v-btn
             color="blue-darken-1"
             variant="text"
-            @click="dialog = false"
+            @click="savePost"
           >
             Save
           </v-btn>
@@ -61,17 +63,32 @@
       </v-card>
     </v-dialog>
 </template>
-<script>
+<script lang="ts">
+import AlertHelper from '@/helpers/AlertHelper'
+import ApiHelper from '@/helpers/ApiHelper'
+
   export default {
     name:"CreateBlogForm",
     data: () => ({
       dialog: false,
+      title:"",
+      content:"",
     }),
     methods:{
-        openDialog: function(){
-            console.log("open")
-            this.dialog=true
-        }
+      openDialog: function(){
+          this.dialog=true
+      },
+      savePost:function(){
+        console.log(this.title)
+        console.log(this.content)
+        this.dialog=false
+        const loading = AlertHelper.showLoading("Saving Post.")
+        ApiHelper.createBlog(this.title, this.content).then((_)=>{
+          loading.close()
+          AlertHelper.successToast("Post added successfully.")
+          this.$emit("addedPost")
+        }).catch(e=>loading.close())
+      }
     }
   }
 </script>

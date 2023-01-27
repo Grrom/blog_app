@@ -22,15 +22,19 @@
 
       <v-spacer></v-spacer>
 
-      <CreateBlogForm/>
+      <CreateBlogForm v-on:addedPost="refreshPosts"/>
     </v-app-bar>
+
+    <div class="loader-container" v-if="blogs===undefined || needsRefresh">
+      <img class="loader" src="@/assets/loading.gif" alt="loading please wait...">
+    </div>
 
     <v-main class="main">
       <v-col
         sm="12"
         md="10"
         lg="10">
-        <BlogCard v-for="(x,_) in blogs" :item="x" :key="_"/>
+        <BlogCard v-for="(x,_) in blogs" :item="x" :key="_" v-on:deleted="removePost"/>
       </v-col>
     </v-main>
   </v-app>
@@ -52,13 +56,37 @@ export default {
   },
 
   mounted(){
-    ApiHelper.getBlogs()
+    this.getBlogs()
   },
 
   data: () => ({
-    blogs:[new BlogModel("2","title", "yeee"), new BlogModel("3","title", "hawwww")]
+    blogs:undefined as Array<BlogModel> | undefined,
+    needsRefresh: false,
   }),
+
   methods:{
+    refreshPosts(){
+      this.needsRefresh=true
+      this.getBlogs()
+    },
+    getBlogs(){
+      ApiHelper.getBlogs().then(blogs=>{
+        this.blogs=blogs
+        this.needsRefresh=false
+      })
+    },
+    removePost(id:string){
+      let indexToRemove = undefined;
+      for(let i = 0; i< (this.blogs===undefined ? [] : this.blogs).length; i++){
+        if(this.blogs![i].id === id){
+          indexToRemove = i;
+          break;
+        }
+      }
+      if(indexToRemove!==undefined){
+        this.blogs?.splice(indexToRemove, 1);
+      }
+    }
   }
 };
 </script>
@@ -66,6 +94,18 @@ export default {
 <style scoped>
 .main{
   background-color: #f0f0f0;
+}
+
+.loader-container{
+  width: 100%;
+  margin: auto;
+  padding-top: 64px;
+  background-color: #f0f0f0;
+}
+
+.loader{
+  display: block;
+  margin: auto;
 }
 
 .col{
