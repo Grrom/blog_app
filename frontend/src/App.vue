@@ -34,7 +34,7 @@
         sm="12"
         md="10"
         lg="10">
-        <BlogCard v-for="(x,_) in blogs" :item="x" :key="_" v-on:deleted="removePost"/>
+        <BlogCard v-for="(x,_) in sortedBlogs" :item="x" :key="x.id" v-on:deleted="removePost" v-on:updated="updatePost"/>
       </v-col>
     </v-main>
   </v-app>
@@ -64,6 +64,14 @@ export default {
     needsRefresh: false,
   }),
 
+  computed:{
+    sortedBlogs(){
+      return this.blogs?.sort((b,a)=>{
+        return new Date(a.dateCreated).getTime() - new Date(b.dateCreated).getTime();
+      })
+    }
+  },
+
   methods:{
     refreshPosts(){
       this.needsRefresh=true
@@ -76,16 +84,24 @@ export default {
       })
     },
     removePost(id:string){
-      let indexToRemove = undefined;
-      for(let i = 0; i< (this.blogs===undefined ? [] : this.blogs).length; i++){
-        if(this.blogs![i].id === id){
-          indexToRemove = i;
-          break;
-        }
-      }
+      let indexToRemove = this.getPostIndex(id);
       if(indexToRemove!==undefined){
         this.blogs?.splice(indexToRemove, 1);
       }
+    },
+    getPostIndex(id:string){
+      let index = undefined;
+      for(let i = 0; i< (this.blogs===undefined ? [] : this.blogs).length; i++){
+        if(this.blogs![i].id === id){
+          index = i;
+          break;
+        }
+      }
+      return index
+    },
+    updatePost(updated:BlogModel){
+      this.removePost(updated.id)
+      this.blogs?.push(updated)
     }
   }
 };

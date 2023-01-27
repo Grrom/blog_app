@@ -3,9 +3,10 @@
         <div class="blog">
             <div class="title">{{ item?.title }}</div>
             <div class="content">{{ item?.content }}</div>
+            <div class="date-posted">Date posted: {{ item?.dateCreated.toUTCString() }}</div>
         </div>
         <v-container>
-            <ConfirmDialog buttonText="Update" color="primary"/>
+            <UpdateBlogForm :item="item" v-on:updated="updateItem"/>
             <span class="custom-spacer"></span>
             <ConfirmDialog 
                 buttonText="Delete" 
@@ -22,6 +23,7 @@ import AlertHelper from '@/helpers/AlertHelper';
 import ApiHelper from '@/helpers/ApiHelper';
 import BlogModel from '@/types/BlogModel';
 import ConfirmDialog from './ConfirmDialog.vue';
+import UpdateBlogForm from './UpdateBlogForm.vue';
 
 export default {
   name:"BlogCard",
@@ -32,8 +34,9 @@ export default {
     },
   },
   components:{
-    ConfirmDialog
-  },
+    ConfirmDialog,
+    UpdateBlogForm
+},
   methods:{
     deletePost:function(){
         const loading =  AlertHelper.showLoading("Deleting Post...");
@@ -41,7 +44,10 @@ export default {
             loading.close()
             this.$emit("deleted", this.item.id)
         }).catch(e=>{loading.close})
-    }
+    },
+    updateItem:function(item:BlogModel){
+        this.$emit("updated",item);
+    },
   }
 }
 </script>
@@ -52,6 +58,12 @@ export default {
     display: flex;
     flex-wrap: wrap;
     justify-content: end;
+}
+
+.date-posted{
+    margin-top: 12px;
+    font-size: small;
+    font-style: italic;
 }
 
 .custom-spacer{

@@ -13,7 +13,7 @@ CORS(app)
 def create_blog():
     args = request.form
     firebase_helper.create_blog(
-        args.get("title"), args.get("content"))
+        args.get("title"), args.get("content"), args.get("date_created"))
     return "blog added"
 
 
@@ -26,7 +26,7 @@ def list_blog():
 def update_blog():
     args = request.form
     firebase_helper.update_blog(
-        args.get("id"), args.get("title"), args.get("content"))
+        args.get("id"), args.get("title"), args.get("content"), args.get("date_created"))
     return "blog updated"
 
 

@@ -10,7 +10,14 @@ export default class ApiHelper {
       const response = await data.json();
       const blogs: Array<BlogModel> = [];
       response.forEach((element: any) => {
-        blogs.push(new BlogModel(element.id, element.title, element.content));
+        blogs.push(
+          new BlogModel(
+            element.id,
+            element.title,
+            element.content,
+            new Date(element.date_created)
+          )
+        );
       });
 
       return blogs;
@@ -21,6 +28,7 @@ export default class ApiHelper {
     const formData = new FormData();
     formData.append("title", title);
     formData.append("content", content);
+    formData.append("date_created", new Date().toISOString());
     return await fetch(this.url + "create_blog", {
       method: "POST",
       body: formData,
@@ -36,12 +44,14 @@ export default class ApiHelper {
   static async updateBlog(
     id: string,
     title: string,
-    content: string
+    content: string,
+    dateCreated: Date
   ): Promise<boolean> {
     const formData = new FormData();
     formData.append("id", id);
     formData.append("title", title);
     formData.append("content", content);
+    formData.append("date_created", dateCreated.toISOString());
     return await fetch(this.url + "update_blog", {
       method: "POST",
       body: formData,

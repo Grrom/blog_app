@@ -5,16 +5,16 @@
     >
       <template v-slot:activator="{ props }">
         <v-btn
-          color="secondary"
+          color="primary"
           v-bind="props"
           v-on:click="openDialog"
         >
-         Create Blog 
+         Update 
         </v-btn>
       </template>
       <v-card>
         <v-card-title>
-          <span class="text-h5">Create Blog</span>
+          <span class="text-h5">Update Blog</span>
         </v-card-title>
         <v-card-text>
           <v-container>
@@ -55,7 +55,7 @@
           <v-btn
             color="blue-darken-1"
             variant="text"
-            @click="savePost"
+            @click="updatePost"
           >
             Save
           </v-btn>
@@ -66,32 +66,39 @@
 <script lang="ts">
 import AlertHelper from '@/helpers/AlertHelper'
 import ApiHelper from '@/helpers/ApiHelper'
+import BlogModel from '@/types/BlogModel'
 
   export default {
-    name:"CreateBlogForm",
+    name:"UpdateBlogForm",
+    props:{
+      item:{
+        type:BlogModel,
+        required:true,
+      } 
+    },
     data: () => ({
-      dialog: false,
       title:"",
       content:"",
+      dialog: false,
     }),
     mounted(){
-      console.log("dd")
-      this.title=""
-      this.content=""
+      console.log("mounted")
+      this.title = this.item.title
+      this.content = this.item.content
+      console.log(this.title)
     },
     methods:{
       openDialog: function(){
           this.dialog=true
       },
-      savePost:function(){
+      updatePost:function(){
         this.dialog=false
         const loading = AlertHelper.showLoading("Saving Post.")
-        ApiHelper.createBlog(this.title, this.content).then((_)=>{
+        const updatedPost = new BlogModel(this.item.id, this.title, this.content, this.item.dateCreated)
+        ApiHelper.updateBlog(updatedPost.id,updatedPost.title, updatedPost.content, updatedPost.dateCreated).then((_)=>{
           loading.close()
-          this.title=""
-          this.content=""
-          AlertHelper.successToast("Post added successfully.")
-          this.$emit("addedPost")
+          AlertHelper.successToast("Post updated successfully.")
+          this.$emit("updated", updatedPost)
         }).catch(e=>loading.close())
       }
     }

@@ -12,11 +12,12 @@ db = firestore.client()
 events_collection = "blogs"
 
 
-def create_blog(title, content):
+def create_blog(title, content, date_created):
     doc_ref = db.collection(events_collection).document()
     doc_ref.set({
         u'title': title,
         u'content': content,
+        u'date_created': date_created,
     })
 
 
